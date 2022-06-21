@@ -1,0 +1,27 @@
+name: Kubectl
+description: GitHub Action to manage a K8s cluster using kubectl
+branding:
+  icon: terminal
+  color: blue
+inputs:
+  kubectl-version:
+    description: Version of the kubectl CLI to use
+    required: false
+    default: v1.24.0
+runs:
+  using: composite
+  steps:
+    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      shell: bash
+    - name: Configure kubectl CLI
+      shell: bash
+      run: |
+        curl -LO "https://dl.k8s.io/release/${{ inputs.kubectl-version }}/bin/linux/amd64/kubectl"
+        curl -LO "https://dl.k8s.io/${{ inputs.kubectl-version }}/bin/linux/amd64/kubectl.sha256"
+        echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+        rm kubectl.sha256
+        chmod +x kubectl
+        
+        mkdir $GITHUB_WORKSPACE/bin
+        mv kubectl $GITHUB_WORKSPACE/bin
+        echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
