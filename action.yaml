@@ -22,6 +22,6 @@ runs:
         rm kubectl.sha256
         chmod +x kubectl
         
-        mkdir $GITHUB_WORKSPACE/bin
+        mkdir -p $GITHUB_WORKSPACE/bin
         mv kubectl $GITHUB_WORKSPACE/bin
         echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
